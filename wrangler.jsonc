@@ -1,0 +1,14 @@
+// Cloudflare Worker serving the built site as static assets. The pages
+// are client-side paths, so unknown paths fall back to index.html. Films are
+// not here: host them anywhere that serves video (see src/content/projects.ts).
+// Change "name" to your own; add "routes" for a custom domain.
+{
+  "name": "kris-desk-portfolio",
+  "compatibility_date": "2026-10-30",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}

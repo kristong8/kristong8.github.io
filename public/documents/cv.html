@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kris Tong · English CV</title>
+    <style>
+      body { margin: 0; background: #f6f2e9; color: #24211d; font: 16px system-ui, sans-serif; }
+      iframe { display: block; width: 100%; height: 100dvh; border: 0; }
+      [hidden] { display: none; }
+      p { margin: 2rem; }
+    </style>
+  </head>
+  <body>
+    <p id="status" role="status">Loading CV…</p>
+    <iframe id="cv" title="English CV" hidden></iframe>
+    <script type="module">
+      const chinese = new URLSearchParams(location.search).get('lang') === 'zh'
+      const label = chinese ? '中文简历' : 'English CV'
+      const file = chinese ? 'kris-tong-cv-zh.pdf' : 'kris-tong-cv.pdf'
+      const status = document.getElementById('status')
+      const viewer = document.getElementById('cv')
+
+      document.documentElement.lang = chinese ? 'zh-CN' : 'en'
+      document.title = `Kris Tong · ${label}`
+      viewer.title = label
+      if (chinese) status.textContent = '正在打开简历…'
+
+      try {
+        const response = await fetch(file)
+        if (!response.ok) throw new Error('CV request failed')
+        // The local preview serves PDFs as generic binary data.
+        const pdf = new Blob([await response.arrayBuffer()], { type: 'application/pdf' })
+        viewer.src = URL.createObjectURL(pdf)
+        viewer.hidden = false
+        status.hidden = true
+      } catch {
+        status.textContent = chinese ? '简历加载失败，请刷新重试。' : 'Could not open the CV. Refresh to try again.'
+      }
+    </script>
+  </body>
+</html>
